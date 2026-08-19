@@ -1,0 +1,3090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AquaMind AI | Smart Farm Intelligence</title>
+
+<style>
+
+:root{
+    --bg:#fffaf2;
+    --panel:#ffffff;
+    --panel2:#f5f9ff;
+    --green:#2bb673;
+    --green2:#1b8a54;
+    --blue:#2f86ff;
+    --orange:#ffb547;
+    --yellow:#ffd970;
+    --red:#eb5f5f;
+    --text:#1a2f2b;
+    --muted:#526b65;
+    --border:rgba(26,47,43,.12);
+    --shadow:0 18px 38px rgba(35,64,60,.12);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+}
+
+body{
+    background:
+        radial-gradient(circle at top left, rgba(255,181,71,.28), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(47,134,255,.18), transparent 30%),
+        radial-gradient(circle at 60% 10%, rgba(43,182,115,.14), transparent 20%),
+        linear-gradient(180deg, #fffdf9 0%, #eefaf5 48%, #f3f9ff 100%);
+    color:var(--text);
+    min-height:100vh;
+    font-size:15px;
+    overflow-x:hidden;
+    background-attachment: fixed;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+    position:fixed;
+    left:18px;
+    top:18px;
+    bottom:18px;
+    width:235px;
+    padding:25px 17px;
+    background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(240,250,245,.92));
+    border:1px solid rgba(30,67,55,.08);
+    border-radius:28px;
+    z-index:20;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 24px 50px rgba(17,41,33,.12);
+}
+
+.brand{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-bottom:8px;
+}
+
+.brand-logo{
+    width:185px;
+    max-width:100%;
+    height:auto;
+    display:block;
+    filter: drop-shadow(0 10px 18px rgba(20, 48, 36, 0.08));
+}
+
+.logo-sub{
+    color:var(--muted);
+    font-size:10px;
+    margin-top:5px;
+    margin-bottom:35px;
+    letter-spacing:1px;
+    font-weight:700;
+    text-align:center;
+}
+
+.nav button{
+    width:100%;
+    padding:13px 14px;
+    margin-bottom:8px;
+    border:none;
+    border-radius:14px;
+    background:transparent;
+    color:#3d5d56;
+    text-align:left;
+    cursor:pointer;
+    transition:.28s ease;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:0.01em;
+}
+
+.nav button:hover,
+.nav button.active{
+    background:linear-gradient(90deg,#eaf7ff,#ebfff5);
+    color:var(--text);
+    transform:translateX(4px);
+    box-shadow: inset 0 0 0 1px rgba(47,134,255,.2), 0 8px 18px rgba(35,90,74,.08);
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+    margin-left:275px;
+    padding:30px;
+    max-width:1550px;
+}
+
+.dashboard{
+    display:none;
+}
+
+.dashboard.active{
+    display:block;
+}
+
+.dashboard-shell{
+    background:rgba(255,255,255,.78);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:24px;
+    margin-bottom:18px;
+    box-shadow:0 18px 38px rgba(24,49,35,.04);
+    position:relative;
+    overflow:hidden;
+}
+
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.dashboard-header h2{
+    font-size:22px;
+}
+
+.dashboard-header .tag{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    background:#0c3021;
+    color:var(--green);
+    border:1px solid #256d49;
+    border-radius:18px;
+    padding:7px 12px;
+    font-size:10px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+}
+
+.dashboard-card{
+    background:linear-gradient(180deg,#ffffff,#f8fbff);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px;
+    box-shadow: 0 10px 24px rgba(33,60,56,.06);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.dashboard-card:hover,
+.card:hover,
+.panel:hover,
+.crop:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 18px 30px rgba(26,47,43,.08);
+    border-color: rgba(43,182,115,.22);
+}
+
+.dashboard-card .label{
+    color:var(--muted);
+    font-size:10px;
+    margin-bottom:8px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-weight:700;
+}
+
+.dashboard-card .big{
+    font-size:26px;
+    font-weight:800;
+}
+
+.dashboard-card .mini{
+    color:#516a64;
+    font-size:12px;
+    line-height:1.7;
+}
+
+.dashboard-row{
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:18px;
+    margin-top:18px;
+}
+
+.list-group{
+    display:grid;
+    gap:10px;
+}
+
+.list-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    background:#f4faf6;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:12px 14px;
+    font-size:12px;
+}
+
+.badge{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+
+.badge.green{ background:#ebfff3; color:var(--green2); border:1px solid rgba(43,182,115,.2); }
+.badge.orange{ background:#fff5e2; color:#c77a00; border:1px solid rgba(255,181,71,.25); }
+.badge.blue{ background:#edf6ff; color:#1157b7; border:1px solid rgba(47,134,255,.2); }
+.badge.red{ background:#fff1f1; color:#c34242; border:1px solid rgba(235,95,95,.2); }
+
+.bar-stack{
+    display:grid;
+    gap:12px;
+}
+
+.bar-line{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#b9d3c6;
+    font-size:12px;
+}
+
+.bar-track{
+    flex:1;
+    height:10px;
+    background:#173329;
+    border-radius:999px;
+    overflow:hidden;
+}
+
+.bar-track span{
+    display:block;
+    height:100%;
+    border-radius:inherit;
+    background:linear-gradient(90deg,var(--green),var(--blue));
+}
+
+.toggle-list{
+    display:grid;
+    gap:12px;
+    margin-top:18px;
+}
+
+.toggle-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#f4faf6;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px 14px;
+    color:var(--text);
+    font-size:13px;
+}
+
+.switch{
+    width:46px;
+    height:26px;
+    border-radius:999px;
+    background:#dfeae4;
+    position:relative;
+    border:1px solid rgba(24,49,35,.08);
+}
+
+.switch::after{
+    content:"";
+    position:absolute;
+    top:3px;
+    left:4px;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:white;
+    transition:.25s;
+    box-shadow: 0 2px 6px rgba(24,49,35,.12);
+}
+
+.switch.on{
+    background:var(--green);
+}
+
+.switch.on::after{
+    left:22px;
+    background:#ffffff;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    padding:18px 20px;
+    background:rgba(255,255,255,.55);
+    border:1px solid rgba(26,47,43,.06);
+    border-radius:22px;
+    box-shadow:0 12px 26px rgba(26,47,43,.04);
+    backdrop-filter: blur(8px);
+}
+
+.topbar h1{
+    font-size:36px;
+    line-height:1.2;
+}
+
+.topbar p{
+    color:var(--muted);
+    margin-top:6px;
+    font-size:14px;
+}
+
+.live{
+    border:1px solid rgba(43,182,115,.28);
+    background:linear-gradient(135deg,#ecfff3,#dffaf0);
+    color:var(--green2);
+    padding:10px 15px;
+    border-radius:30px;
+    font-size:11px;
+    font-weight:800;
+    box-shadow:0 10px 22px rgba(43,182,115,.12);
+}
+
+.dot{
+    display:inline-block;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#23b65b;
+    box-shadow:0 0 15px rgba(35,182,91,.7);
+    margin-right:7px;
+}
+
+/* =========================
+   SETUP CARD
+========================= */
+
+.setup{
+    background:
+        linear-gradient(135deg, rgba(255,255,255,.97), rgba(232,249,237,.94)),
+        radial-gradient(circle at top right, rgba(47,191,113,.13), transparent 32%);
+    border:1px solid rgba(47,191,113,.18);
+    border-radius:28px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 24px 48px rgba(24,49,35,.05), inset 0 1px 0 rgba(255,255,255,.9);
+    position:relative;
+    overflow:hidden;
+}
+
+.setup::before,
+.panel::before,
+.dashboard-shell::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(135deg, rgba(255,255,255,.22), transparent 50%);
+    pointer-events:none;
+}
+
+.setup-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+}
+
+.setup-header h2{
+    font-size:20px;
+}
+
+.setup-header span{
+    font-size:11px;
+    color:var(--green2);
+    background:#eafaf1;
+    padding:7px 11px;
+    border-radius:20px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:13px;
+}
+
+.field label{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    margin-bottom:7px;
+}
+
+.field input,
+.field select{
+    width:100%;
+    padding:13px;
+    border-radius:11px;
+    border:1px solid var(--border);
+    outline:none;
+    background:#f9fdfb;
+    color:var(--text);
+}
+
+.field input:focus,
+.field select:focus{
+    border-color:var(--green);
+    box-shadow:0 0 0 3px rgba(47,191,113,.15);
+}
+
+.generate{
+    margin-top:18px;
+    padding:14px 20px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg, var(--green), #4bd98a);
+    color:#062015;
+    font-weight:800;
+    cursor:pointer;
+    transition:.25s;
+    box-shadow:0 14px 26px rgba(43,182,115,.18);
+}
+
+.generate:hover{
+    transform:translateY(-2px);
+    box-shadow:0 16px 30px rgba(69,242,139,.25);
+}
+
+/* =========================
+   FARM SUMMARY
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:13px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:linear-gradient(180deg,#ffffff,#f5faf6);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px;
+    box-shadow:0 10px 24px rgba(24,49,35,.03);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.card-label{
+    color:var(--muted);
+    font-size:10px;
+}
+
+.card-value{
+    margin-top:9px;
+    font-size:25px;
+    font-weight:800;
+}
+
+.green{color:var(--green)}
+.blue{color:var(--blue)}
+.orange{color:var(--orange)}
+.red{color:var(--red)}
+
+/* =========================
+   GRID
+========================= */
+
+.grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr;
+    gap:18px;
+}
+
+.panel{
+    background:linear-gradient(180deg, rgba(255,255,255,.86), rgba(250,253,251,.78));
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:21px;
+    box-shadow:0 18px 36px rgba(24,49,35,.04);
+    position:relative;
+    overflow:hidden;
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.panel-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.panel-title h2{
+    font-size:17px;
+}
+
+.panel-title span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* =========================
+   CROP CARDS
+========================= */
+
+.crop-list{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.crop{
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(180deg,#f6fbf7,#edf7f1);
+    border:1px solid var(--border);
+    position:relative;
+    overflow:hidden;
+}
+
+.crop:hover{
+    border-color:var(--green);
+    box-shadow:0 12px 24px rgba(47,191,113,.08);
+}
+
+.crop-top{
+    display:flex;
+    justify-content:space-between;
+}
+
+.crop-icon{
+    font-size:29px;
+}
+
+.crop-name{
+    font-weight:800;
+    margin-top:10px;
+}
+
+.crop-area{
+    color:var(--green);
+    font-size:12px;
+    margin-top:5px;
+}
+
+.crop-info{
+    margin-top:13px;
+    color:#809b8d;
+    font-size:11px;
+    line-height:1.7;
+}
+
+.progress{
+    height:6px;
+    background:#183329;
+    border-radius:20px;
+    margin-top:10px;
+}
+
+.progress div{
+    height:100%;
+    border-radius:20px;
+    background:var(--green);
+}
+
+/* =========================
+   AI CARD
+========================= */
+
+.ai{
+    background:
+        radial-gradient(circle at 90% 10%,rgba(47,191,113,.12),transparent 35%),
+        linear-gradient(145deg,#eefaf3,#e0f2e7);
+    border:1px solid rgba(47,191,113,.2);
+}
+
+.ai-badge{
+    display:inline-block;
+    padding:7px 11px;
+    border-radius:20px;
+    background:#eafaf1;
+    color:var(--green2);
+    font-size:10px;
+    margin-bottom:14px;
+}
+
+.ai h2{
+    font-size:22px;
+    line-height:1.3;
+}
+
+.ai-text{
+    margin-top:14px;
+    color:#a9c7b8;
+    line-height:1.7;
+    font-size:13px;
+}
+
+.ai-result{
+    margin-top:18px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.ai-mini{
+    padding:13px;
+    border-radius:13px;
+    background:rgba(255,255,255,.05);
+}
+
+.ai-mini span{
+    display:block;
+    color:#718b7d;
+    font-size:10px;
+}
+
+.ai-mini strong{
+    display:block;
+    margin-top:5px;
+}
+
+.ai-button{
+    width:100%;
+    padding:13px;
+    margin-top:17px;
+    border:none;
+    border-radius:11px;
+    background:linear-gradient(135deg, var(--green), #5fe49a);
+    color:#052015;
+    font-weight:800;
+    cursor:pointer;
+    box-shadow:0 14px 26px rgba(43,182,115,.2);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.ai-button:hover{
+    transform: translateY(-1px);
+    box-shadow:0 18px 30px rgba(43,182,115,.28);
+}
+
+/* =========================
+   WEATHER
+========================= */
+
+.weather{
+    margin-top:18px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.weather-main{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.weather-icon{
+    font-size:55px;
+}
+
+.temperature{
+    font-size:36px;
+    font-weight:800;
+}
+
+.weather p{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:4px;
+}
+
+.forecast{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:7px;
+    margin-top:20px;
+}
+
+.day{
+    text-align:center;
+    background:#f3faf5;
+    padding:11px 4px;
+    border-radius:12px;
+    border:1px solid var(--border);
+}
+
+.day span{
+    display:block;
+    font-size:10px;
+    color:#789487;
+}
+
+.day b{
+    display:block;
+    margin-top:7px;
+}
+
+/* =========================
+   HARVEST
+========================= */
+
+.harvest{
+    margin-top:18px;
+}
+
+.harvest-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.harvest-table th,
+.harvest-table td{
+    text-align:left;
+    padding:12px 8px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    font-size:11px;
+}
+
+.harvest-table th{
+    color:#789487;
+    font-weight:500;
+}
+
+/* =========================
+   FARM MAP
+========================= */
+
+.map{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+}
+
+.zone{
+    min-height:100px;
+    padding:13px;
+    border-radius:14px;
+    background:linear-gradient(180deg,#e7f8ee,#dff3e8);
+    border:1px solid rgba(47,191,113,.2);
+}
+
+.zone:nth-child(2){
+    background:linear-gradient(180deg,#fff1f0,#fde7e5);
+    border-color:rgba(230,107,107,.18);
+}
+
+.zone:nth-child(3){
+    background:linear-gradient(180deg,#fffaf0,#fdf0d4);
+    border-color:rgba(244,179,94,.22);
+}
+
+.zone:nth-child(4){
+    background:linear-gradient(180deg,#edf9ff,#dfeef9);
+    border-color:rgba(63,167,216,.2);
+}
+
+.zone b{
+    font-size:12px;
+}
+
+.zone p{
+    margin-top:12px;
+    font-size:22px;
+    font-weight:800;
+}
+
+.zone small{
+    color:#91a99c;
+}
+
+/* =========================
+   WATER
+========================= */
+
+.water-box{
+    display:flex;
+    align-items:center;
+    gap:22px;
+}
+
+.tank{
+    width:85px;
+    height:155px;
+    border:3px solid #9cb7a8;
+    border-radius:17px;
+    position:relative;
+    overflow:hidden;
+    background:#edf6f0;
+}
+
+.water{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:64%;
+    background:linear-gradient(#39caff,#0879ba);
+    transition:1s;
+}
+
+.tank-info h2{
+    font-size:28px;
+}
+
+.tank-info p{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:5px;
+}
+
+/* =========================
+   CONTROL
+========================= */
+
+.controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+    margin-top:18px;
+}
+
+.control{
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:700;
+}
+
+.start{
+    background:#44d980;
+    color:#062015;
+    font-weight:800;
+}
+
+.stop{
+    background:#ffe2e2;
+    color:#b93030;
+    font-weight:800;
+}
+
+.auto{
+    background:#eaf6ff;
+    color:#0b5fb4;
+    font-weight:800;
+}
+
+.reset{
+    background:#eef3ef;
+    color:#2e4b44;
+    font-weight:800;
+}
+
+/* =========================
+   ALERT
+========================= */
+
+.alert{
+    margin-top:14px;
+    padding:13px;
+    border-radius:11px;
+    font-size:11px;
+    background:#fff0f0;
+    border:1px solid rgba(235,95,95,.2);
+    color:#b63b3b;
+    font-weight:700;
+}
+
+.success{
+    background:#ebfff3;
+    border-color:rgba(43,182,115,.22);
+    color:#0d7f47;
+    font-weight:700;
+}
+
+/* =========================
+   FLOW
+========================= */
+
+.flow{
+    margin-top:18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.flow-item{
+    text-align:center;
+}
+
+.flow-icon{
+    width:45px;
+    height:45px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:auto;
+    border-radius:13px;
+    background:#102d21;
+    font-size:20px;
+}
+
+.flow-item small{
+    display:block;
+    margin-top:6px;
+    color:#718c7e;
+    font-size:9px;
+}
+
+.arrow{
+    color:var(--green);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:1150px){
+
+    .sidebar{
+        width:190px;
+    }
+
+    .main{
+        margin-left:215px;
+    }
+
+    .stats{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .form-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .main{
+        margin-left:0;
+        padding:15px;
+    }
+
+    .topbar{
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .topbar h1{
+        font-size:22px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .form-grid,
+    .crop-list,
+    .weather{
+        grid-template-columns:1fr;
+    }
+
+    .map{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .forecast{
+        grid-template-columns:repeat(5,1fr);
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+        <img src="logo.png" alt="Irrigrow smart irrigation logo" class="brand-logo">
+    </div>
+
+    <div class="logo-sub">
+        PRECISION AGRICULTURE
+    </div>
+
+    <nav class="nav">
+
+        <button type="button" class="active" data-dashboard="overview" data-label="Farm Overview" data-title="Smart Farm Intelligence 🌱" data-subtitle="Tell us about your farm. AquaMind AI will plan the rest." data-title-ta="பண்ணை மேலோட்டம் 🌱" data-subtitle-ta="உங்கள் பண்ணை பற்றி சொல்லுங்கள். AquaMind AI அதை திட்டமிடும்.">◉ Farm Overview</button>
+        <button type="button" data-dashboard="crop" data-label="Crop Planning" data-title="Crop Planning Dashboard 🌱" data-subtitle="Track crop stages, yield potential and field priorities." data-title-ta="பயிர் திட்டமிடல் 🌱" data-subtitle-ta="பயிர் நிலைகள், மகசூல் திறன் மற்றும் வயல் முன்னுரிமைகளை கண்காணிக்கவும்.">🌱 Crop Planning</button>
+        <button type="button" data-dashboard="irrigation" data-label="Irrigation" data-title="Irrigation Control Center 💧" data-subtitle="Monitor flow, automation and zone performance in real time." data-title-ta="பாசன கட்டுப்பாட்டு மையம் 💧" data-subtitle-ta="நீர் ஓட்டம், தன்னியக்கம் மற்றும் மண்டல செயல்திறனை நிகழ்நேரத்தில் கண்காணிக்கவும்.">💧 Irrigation</button>
+        <button type="button" data-dashboard="weather" data-label="Weather AI" data-title="Weather Risk Intelligence 🌦" data-subtitle="AI insights help you adapt irrigation based on forecast conditions." data-title-ta="வானிலை ஆபத்து நுண்ணறிவு 🌦" data-subtitle-ta="வானிலை முன்னறிவிப்பின் அடிப்படையில் நீர்ப்பாசனத்தை மாற்ற AI நுண்ணறிவு உதவுகிறது.">🌦 Weather AI</button>
+        <button type="button" data-dashboard="aqua" data-label="AquaAI" data-title="AquaAI Recommendations 🤖" data-subtitle="Receive actionable decisions for crop health and water efficiency." data-title-ta="AquaAI பரிந்துரைகள் 🤖" data-subtitle-ta="பயிர் ஆரோக்கியம் மற்றும் நீர் திறன் குறித்து செயல்படக்கூடிய முடிவுகளைப் பெறுங்கள்.">🤖 AquaAI</button>
+        <button type="button" data-dashboard="analytics" data-label="Analytics" data-title="Farm Analytics 📊" data-subtitle="Compare water use, crop growth and production trends." data-title-ta="பண்ணை பகுப்பாய்வு 📊" data-subtitle-ta="நீர் பயன்பாடு, பயிர் வளர்ச்சி மற்றும் உற்பத்தி போக்குகளை ஒப்பிடுங்கள்.">📊 Analytics</button>
+        <button type="button" data-dashboard="alerts" data-label="Alerts" data-title="Field Alerts ⚠" data-subtitle="Stay ahead of stress, leak and environmental risk events." data-title-ta="வயல் எச்சரிக்கைகள் ⚠" data-subtitle-ta="அழுத்தம், கசிவு மற்றும் சுற்றுச்சூழல் அபாய நிகழ்வுகளை முன்னதாகவே கண்டறியுங்கள்.">⚠ Alerts</button>
+        <button type="button" data-dashboard="settings" data-label="Settings" data-title="System Settings ⚙" data-subtitle="Adjust thresholds, sensor calibration and automation preferences." data-title-ta="சிஸ்டம் அமைப்புகள் ⚙" data-subtitle-ta="செயல்திறன் வரம்புகள், சென்சார் அளவீடு மற்றும் தானியங்கு அமைப்புகளை சரிசெய்யவும்.">⚙ Settings</button>
+        <button type="button" id="translateBtn" data-lang="en" data-label="Translate" data-title="Smart Farm Intelligence 🌱" data-subtitle="Tell us about your farm. AquaMind AI will plan the rest." data-title-ta="சிறந்த பண்ணை நுண்ணறிவு 🌱" data-subtitle-ta="உங்கள் பண்ணை பற்றி சொல்லுங்கள். AquaMind AI அதை திட்டமிடும்.">🌐 தமிழ்</button>
+
+    </nav>
+
+</aside>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+<div class="topbar">
+
+    <div>
+        <h1 data-i18n data-en="Smart Farm Intelligence 🌱" data-ta="சிறந்த பண்ணை நுண்ணறிவு 🌱">Smart Farm Intelligence 🌱</h1>
+        <p data-i18n data-en="Tell us about your farm. AquaMind AI will plan the rest." data-ta="உங்கள் பண்ணை பற்றி சொல்லுங்கள். AquaMind AI அதை திட்டமிடும்.">
+            Tell us about your farm. AquaMind AI will plan the rest.
+        </p>
+    </div>
+
+    <div class="live">
+        <span class="dot"></span>
+        AI SYSTEM ONLINE
+    </div>
+
+</div>
+
+
+<div class="dashboard active" data-dashboard="overview">
+
+<!-- =========================
+     FARM INPUT
+========================= -->
+
+<section class="setup">
+
+<div class="setup-header">
+
+    <h2 data-i18n data-en="🌾 Create Your Farm Plan" data-ta="🌾 உங்கள் பண்ணை திட்டத்தை உருவாக்குங்கள்">🌾 Create Your Farm Plan</h2>
+
+    <span data-i18n data-en="STEP 01 • FARM INPUT" data-ta="படி 01 • பண்ணை உள்ளீடு">STEP 01 • FARM INPUT</span>
+
+</div>
+
+
+<div class="form-grid">
+
+    <div class="field">
+
+        <label data-i18n data-en="Farmer Name" data-ta="விவசாயி பெயர்">Farmer Name</label>
+
+        <input
+            id="farmerName"
+            placeholder="Enter your name"
+            value="Farmer"
+        >
+
+    </div>
+
+
+    <div class="field">
+
+        <label data-i18n data-en="Total Land (Acres)" data-ta="மொத்த நிலம் (ஏக்கர்)">Total Land (Acres)</label>
+
+        <input
+            id="totalLand"
+            type="number"
+            min="0"
+            value="10"
+        >
+
+    </div>
+
+
+    <div class="field">
+
+        <label data-i18n data-en="Crop" data-ta="பயிர்">Crop</label>
+
+        <select id="crop">
+
+            <option value="rice">🌾 Rice</option>
+            <option value="tomato">🍅 Tomato</option>
+            <option value="sugarcane">🎋 Sugarcane</option>
+            <option value="cotton">🌿 Cotton</option>
+            <option value="groundnut">🥜 Groundnut</option>
+            <option value="onion">🧅 Onion</option>
+
+        </select>
+
+    </div>
+
+
+    <div class="field">
+
+        <label data-i18n data-en="Crop Area (Acres)" data-ta="பயிர் பகுதி (ஏக்கர்)">Crop Area (Acres)</label>
+
+        <input
+            id="cropArea"
+            type="number"
+            min="0"
+            value="6"
+        >
+
+    </div>
+
+
+    <div class="field">
+
+        <label data-i18n data-en="Soil Type" data-ta="மண் வகை">Soil Type</label>
+
+        <select id="soil">
+
+            <option>Loamy Soil</option>
+            <option>Clay Soil</option>
+            <option>Sandy Soil</option>
+            <option>Black Soil</option>
+            <option>Red Soil</option>
+
+        </select>
+
+    </div>
+
+
+    <div class="field">
+
+        <label data-i18n data-en="Irrigation Method" data-ta="பாசன முறை">Irrigation Method</label>
+
+        <select id="irrigation">
+
+            <option>Drip Irrigation</option>
+            <option>Sprinkler</option>
+            <option>Flood Irrigation</option>
+
+        </select>
+
+    </div>
+
+
+    <div class="field">
+
+        <label data-i18n data-en="Planting Date" data-ta="நடவு தேதி">Planting Date</label>
+
+        <input
+            id="plantDate"
+            type="date"
+        >
+
+    </div>
+
+
+    <div class="field">
+
+        <label data-i18n data-en="Available Water (Litres)" data-ta="கிடைக்கும் நீர் (லிட்டர்)">Available Water (Litres)</label>
+
+        <input
+            id="waterInput"
+            type="number"
+            value="50000"
+        >
+
+    </div>
+
+</div>
+
+
+<button
+    id="generateBtn"
+    class="generate"
+    onclick="generateFarm()"
+    data-i18n data-en="✦ GENERATE AI FARM PLAN" data-ta="✦ AI பண்ணை திட்டத்தை உருவாக்கு"
+>
+    ✦ GENERATE AI FARM PLAN
+</button>
+
+</section>
+
+
+<!-- =========================
+     STATS
+========================= -->
+
+<section class="stats">
+
+<div class="card">
+
+    <div class="card-label">
+        FARM OWNER
+    </div>
+
+    <div
+        class="card-value"
+        id="owner"
+    >
+        Farmer
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-label">
+        TOTAL LAND
+    </div>
+
+    <div
+        class="card-value green"
+        id="landDisplay"
+    >
+        10 Acres
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-label">
+        CROP AREA
+    </div>
+
+    <div
+        class="card-value orange"
+        id="cropAreaDisplay"
+    >
+        6 Acres
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-label">
+        EST. CROP DURATION
+    </div>
+
+    <div
+        class="card-value blue"
+        id="duration"
+    >
+        120 Days
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-label">
+        EXPECTED HARVEST
+    </div>
+
+    <div
+        class="card-value green"
+        id="harvest"
+    >
+        —
+    </div>
+
+</div>
+
+</section>
+
+
+<div class="grid">
+
+
+<!-- =========================
+     CROP PLAN
+========================= -->
+
+<section class="panel">
+
+<div class="panel-title">
+
+    <h2>🌱 Your Crop Intelligence</h2>
+
+    <span id="cropTitle">
+        RICE
+    </span>
+
+</div>
+
+
+<div class="crop-list">
+
+
+<div class="crop">
+
+    <div class="crop-top">
+
+        <div>
+            <div class="crop-icon">🌾</div>
+
+            <div
+                class="crop-name"
+                id="cropName"
+            >
+                Rice
+            </div>
+
+            <div
+                class="crop-area"
+                id="cropAreaCard"
+            >
+                6 Acres
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="crop-info">
+
+        <b>Growth Duration</b><br>
+
+        <span id="growth">
+            120–150 days
+        </span>
+
+        <br><br>
+
+        <b>Current Growth Stage</b><br>
+
+        <span id="stage">
+            Planning Stage
+        </span>
+
+        <div class="progress">
+
+            <div
+                id="growthBar"
+                style="width:5%"
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="crop">
+
+    <div class="crop-icon">💧</div>
+
+    <div class="crop-name">
+        Water Intelligence
+    </div>
+
+    <div class="crop-info">
+
+        Estimated requirement
+
+        <br>
+
+        <strong
+            class="blue"
+            id="waterNeed"
+        >
+            12,000 L/day
+        </strong>
+
+        <br><br>
+
+        Irrigation Method
+
+        <br>
+
+        <strong
+            id="method"
+        >
+            Drip Irrigation
+        </strong>
+
+    </div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     AI RECOMMENDATION
+========================= -->
+
+<section class="panel ai">
+
+<div class="ai-badge">
+    ✦ AQUAMIND AI
+</div>
+
+<h2 id="aiTitle">
+    Your farm plan is ready.
+</h2>
+
+<div
+    class="ai-text"
+    id="aiText"
+>
+
+    Enter your farm details and click
+    <b>Generate AI Farm Plan</b>.
+
+    AquaMind will estimate crop duration,
+    harvest timing, water demand,
+    growth stage and irrigation strategy.
+
+</div>
+
+
+<div class="ai-result">
+
+<div class="ai-mini">
+
+    <span>IRRIGATION PRIORITY</span>
+
+    <strong
+        class="green"
+        id="priority"
+    >
+        ANALYZING
+    </strong>
+
+</div>
+
+
+<div class="ai-mini">
+
+    <span>WATER STRATEGY</span>
+
+    <strong
+        id="strategy"
+    >
+        —
+    </strong>
+
+</div>
+
+</div>
+
+
+<button
+    id="analyzeBtn"
+    class="ai-button"
+    onclick="generateFarm()"
+    data-i18n data-en="✦ ANALYZE MY FARM" data-ta="✦ எனது பண்ணை பகுப்பாய்வு"
+>
+    ✦ ANALYZE MY FARM
+</button>
+
+</section>
+
+</div>
+
+
+<!-- =========================
+     WEATHER
+========================= -->
+
+<section class="weather">
+
+<div class="panel">
+
+<div class="panel-title">
+
+    <h2>🌦 Weather Intelligence</h2>
+
+    <span>LIVE DEMO FORECAST</span>
+
+</div>
+
+
+<div class="weather-main">
+
+    <div
+        class="weather-icon"
+        id="weatherIcon"
+    >
+        ☀️
+    </div>
+
+    <div>
+
+        <div
+            class="temperature"
+            id="temperature"
+        >
+            32°C
+        </div>
+
+        <p id="weatherText">
+            Mostly sunny
+        </p>
+
+        <p>
+            Humidity: <b id="humidity">62%</b>
+        </p>
+
+        <p>
+            Rain Probability:
+            <b id="rain">12%</b>
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="forecast">
+
+    <div class="day">
+        <span>NOW</span>
+        ☀️
+        <b>32°</b>
+    </div>
+
+    <div class="day">
+        <span>+3H</span>
+        ☀️
+        <b>33°</b>
+    </div>
+
+    <div class="day">
+        <span>+6H</span>
+        🌤️
+        <b>31°</b>
+    </div>
+
+    <div class="day">
+        <span>+9H</span>
+        🌥️
+        <b>29°</b>
+    </div>
+
+    <div class="day">
+        <span>+12H</span>
+        🌧️
+        <b>27°</b>
+    </div>
+
+</div>
+
+
+<div
+    class="alert success"
+    id="weatherAlert"
+>
+    ✓ Weather conditions currently favor controlled irrigation.
+</div>
+
+</div>
+
+
+<!-- =========================
+     WATER TANK
+========================= -->
+
+<div class="panel">
+
+<div class="panel-title">
+
+    <h2>💧 Water Reserve</h2>
+
+    <span>SMART WATER BUDGET</span>
+
+</div>
+
+
+<div class="water-box">
+
+<div class="tank">
+
+    <div
+        class="water"
+        id="water"
+    ></div>
+
+</div>
+
+
+<div class="tank-info">
+
+    <h2 id="waterPercent">
+        64%
+    </h2>
+
+    <p>
+        Current available water
+    </p>
+
+    <br>
+
+    <strong id="waterLitres">
+        50,000 L
+    </strong>
+
+    <p>
+        AI-managed reserve
+    </p>
+
+</div>
+
+</div>
+
+
+<div
+    class="alert success"
+    id="waterAlert"
+>
+    ✓ Water reserve is sufficient for the current plan.
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     HARVEST PLAN
+========================= -->
+
+<section class="panel harvest">
+
+<div class="panel-title">
+
+    <h2>📅 Crop Timeline & Harvest Prediction</h2>
+
+    <span>AI ESTIMATION</span>
+
+</div>
+
+
+<table class="harvest-table">
+
+<thead>
+
+<tr>
+    <th>CROP</th>
+    <th>AREA</th>
+    <th>GROWTH</th>
+    <th>PLANTING</th>
+    <th>EXPECTED HARVEST</th>
+    <th>STATUS</th>
+</tr>
+
+</thead>
+
+
+<tbody>
+
+<tr>
+
+    <td id="tableCrop">
+        🌾 Rice
+    </td>
+
+    <td id="tableArea">
+        6 Acres
+    </td>
+
+    <td id="tableDuration">
+        120 Days
+    </td>
+
+    <td id="tablePlant">
+        —
+    </td>
+
+    <td
+        class="green"
+        id="tableHarvest"
+    >
+        —
+    </td>
+
+    <td
+        class="green"
+        id="tableStatus"
+    >
+        PLANNING
+    </td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</section>
+
+
+<!-- =========================
+     FARM ZONES
+========================= -->
+
+<section
+    class="panel"
+    style="margin-top:18px"
+>
+
+<div class="panel-title">
+
+    <h2>🗺️ Precision Irrigation Zones</h2>
+
+    <span>
+        AUTO GENERATED
+    </span>
+
+</div>
+
+
+<div class="map">
+
+<div class="zone">
+
+    <b>ZONE 01</b>
+
+    <p id="z1">72%</p>
+
+    <small>Optimal Moisture</small>
+
+</div>
+
+
+<div class="zone">
+
+    <b>ZONE 02</b>
+
+    <p id="z2">27%</p>
+
+    <small style="color:#ff7777">
+        Irrigation Required
+    </small>
+
+</div>
+
+
+<div class="zone">
+
+    <b>ZONE 03</b>
+
+    <p id="z3">48%</p>
+
+    <small>Monitor</small>
+
+</div>
+
+
+<div class="zone">
+
+    <b>ZONE 04</b>
+
+    <p id="z4">64%</p>
+
+    <small>Recently Irrigated</small>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     IRRIGATION CONTROL
+========================= -->
+
+<section
+    class="panel"
+    style="margin-top:18px"
+>
+
+<div class="panel-title">
+
+    <h2>⚙️ Irrigation Control</h2>
+
+    <span id="pumpStatus">
+        PUMP OFF
+    </span>
+
+</div>
+
+
+<div class="controls">
+
+<button
+    class="control start"
+    onclick="startPump()"
+>
+    ▶ START PUMP
+</button>
+
+<button
+    class="control stop"
+    onclick="stopPump()"
+>
+    ■ STOP
+</button>
+
+<button
+    class="control auto"
+    onclick="autoIrrigation()"
+>
+    ✦ AUTO AI
+</button>
+
+<button
+    class="control reset"
+    onclick="resetSystem()"
+>
+    ↻ RESET
+</button>
+
+</div>
+
+
+<div
+    id="systemAlert"
+    class="alert"
+    style="display:none"
+>
+</div>
+
+</section>
+
+
+<!-- =========================
+     SYSTEM FLOW
+========================= -->
+
+<section
+    class="panel"
+    style="margin-top:18px"
+>
+
+<div class="panel-title">
+
+    <h2>
+        🔄 AquaMind Closed-Loop Intelligence
+    </h2>
+
+    <span>
+        SENSOR → AI → ACTION
+    </span>
+
+</div>
+
+
+<div class="flow">
+
+<div class="flow-item">
+
+    <div class="flow-icon">
+        🌱
+    </div>
+
+    <small>
+        SOIL SENSOR
+    </small>
+
+</div>
+
+<div class="arrow">→</div>
+
+<div class="flow-item">
+
+    <div class="flow-icon">
+        📡
+    </div>
+
+    <small>
+        ESP32
+    </small>
+
+</div>
+
+<div class="arrow">→</div>
+
+<div class="flow-item">
+
+    <div class="flow-icon">
+        ☁️
+    </div>
+
+    <small>
+        CLOUD
+    </small>
+
+</div>
+
+<div class="arrow">→</div>
+
+<div class="flow-item">
+
+    <div class="flow-icon">
+        🤖
+    </div>
+
+    <small>
+        AQUA AI
+    </small>
+
+</div>
+
+<div class="arrow">→</div>
+
+<div class="flow-item">
+
+    <div class="flow-icon">
+        💧
+    </div>
+
+    <small>
+        WATER PLAN
+    </small>
+
+</div>
+
+<div class="arrow">→</div>
+
+<div class="flow-item">
+
+    <div class="flow-icon">
+        ⚙️
+    </div>
+
+    <small>
+        PUMP + VALVE
+    </small>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+<div class="dashboard" data-dashboard="crop">
+    <div class="dashboard-shell">
+        <div class="dashboard-header">
+            <h2>🌱 Crop Planning Dashboard</h2>
+            <span class="tag">Growth Watch</span>
+        </div>
+        <div class="dashboard-grid">
+            <div class="dashboard-card"><div class="label">Crop</div><div class="big green">Rice</div><div class="mini">6 acres planted</div></div>
+            <div class="dashboard-card"><div class="label">Stage</div><div class="big blue">Early Growth</div><div class="mini">Nutrient balance steady</div></div>
+            <div class="dashboard-card"><div class="label">Cycle</div><div class="big orange">120 Days</div><div class="mini">Target harvest window</div></div>
+            <div class="dashboard-card"><div class="label">Yield</div><div class="big green">4.8 t/ha</div><div class="mini">Strong field potential</div></div>
+        </div>
+        <div class="dashboard-row">
+            <div class="dashboard-card">
+                <div class="label">Priority Actions</div>
+                <div class="list-group">
+                    <div class="list-item"><span>Soil nutrition check</span><span class="badge green">On Track</span></div>
+                    <div class="list-item"><span>Fertilizer schedule</span><span class="badge orange">Due Soon</span></div>
+                    <div class="list-item"><span>Pest scouting</span><span class="badge blue">Planned</span></div>
+                </div>
+            </div>
+            <div class="dashboard-card">
+                <div class="label">Growth Progress</div>
+                <div class="bar-stack">
+                    <div class="bar-line"><span>Nursery</span><div class="bar-track"><span style="width:38%"></span></div><strong>38%</strong></div>
+                    <div class="bar-line"><span>Vegetative</span><div class="bar-track"><span style="width:61%"></span></div><strong>61%</strong></div>
+                    <div class="bar-line"><span>Flowering</span><div class="bar-track"><span style="width:24%"></span></div><strong>24%</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard" data-dashboard="irrigation">
+    <div class="dashboard-shell">
+        <div class="dashboard-header">
+            <h2>💧 Irrigation Control Center</h2>
+            <span class="tag">Auto Run</span>
+        </div>
+        <div class="dashboard-grid">
+            <div class="dashboard-card"><div class="label">Reservoir</div><div class="big blue">64%</div><div class="mini">50,000 L available</div></div>
+            <div class="dashboard-card"><div class="label">Flow Rate</div><div class="big green">28 L/s</div><div class="mini">Stable system output</div></div>
+            <div class="dashboard-card"><div class="label">Active Zones</div><div class="big orange">03</div><div class="mini">2 zones under irrigation</div></div>
+            <div class="dashboard-card"><div class="label">Pump State</div><div class="big green">ON</div><div class="mini">Priority irrigation active</div></div>
+        </div>
+        <div class="dashboard-row">
+            <div class="dashboard-card">
+                <div class="label">Zone Status</div>
+                <div class="list-group">
+                    <div class="list-item"><span>Zone 01</span><span class="badge green">Optimal</span></div>
+                    <div class="list-item"><span>Zone 02</span><span class="badge red">Needs Water</span></div>
+                    <div class="list-item"><span>Zone 03</span><span class="badge orange">Monitor</span></div>
+                    <div class="list-item"><span>Zone 04</span><span class="badge blue">Stable</span></div>
+                </div>
+            </div>
+            <div class="dashboard-card">
+                <div class="label">System Controls</div>
+                <div class="toggle-list">
+                    <div class="toggle-row"><span>AI Auto Irrigation</span><span class="switch on"></span></div>
+                    <div class="toggle-row"><span>Soil Moisture Alarm</span><span class="switch on"></span></div>
+                    <div class="toggle-row"><span>Night Watering</span><span class="switch"></span></div>
+                    <div class="toggle-row"><span>Leak Detection</span><span class="switch on"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard" data-dashboard="weather">
+    <div class="dashboard-shell">
+        <div class="dashboard-header">
+            <h2>🌦 Weather Risk Intelligence</h2>
+            <span class="tag">Forecast</span>
+        </div>
+        <div class="dashboard-grid">
+            <div class="dashboard-card"><div class="label">Temperature</div><div class="big orange">32°C</div><div class="mini">Peak afternoon heat</div></div>
+            <div class="dashboard-card"><div class="label">Humidity</div><div class="big blue">62%</div><div class="mini">Stable daytime levels</div></div>
+            <div class="dashboard-card"><div class="label">Rain Chance</div><div class="big green">12%</div><div class="mini">Low rainfall risk</div></div>
+            <div class="dashboard-card"><div class="label">Risk</div><div class="big red">Low</div><div class="mini">Schedule watering normally</div></div>
+        </div>
+        <div class="dashboard-row">
+            <div class="dashboard-card">
+                <div class="label">Next 12 Hours</div>
+                <div class="bar-stack">
+                    <div class="bar-line"><span>Now</span><div class="bar-track"><span style="width:70%"></span></div><strong>32°</strong></div>
+                    <div class="bar-line"><span>+3h</span><div class="bar-track"><span style="width:80%"></span></div><strong>33°</strong></div>
+                    <div class="bar-line"><span>+6h</span><div class="bar-track"><span style="width:60%"></span></div><strong>31°</strong></div>
+                    <div class="bar-line"><span>+12h</span><div class="bar-track"><span style="width:35%"></span></div><strong>27°</strong></div>
+                </div>
+            </div>
+            <div class="dashboard-card">
+                <div class="label">AI Advice</div>
+                <div class="mini">Current weather favors controlled irrigation. Consider preserving reservoir capacity before evening heat spikes.</div>
+                <div class="toggle-list">
+                    <div class="toggle-row"><span>Rain alerts</span><span class="switch"></span></div>
+                    <div class="toggle-row"><span>Heat stress mode</span><span class="switch on"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard" data-dashboard="aqua">
+    <div class="dashboard-shell">
+        <div class="dashboard-header">
+            <h2>🤖 AquaAI Recommendations</h2>
+            <span class="tag">AI Engine</span>
+        </div>
+        <div class="dashboard-grid">
+            <div class="dashboard-card"><div class="label">Priority</div><div class="big green">Ready</div><div class="mini">Field conditions are favorable</div></div>
+            <div class="dashboard-card"><div class="label">Water Strategy</div><div class="big blue">Precision Zone</div><div class="mini">Target only moisture-stressed zones</div></div>
+            <div class="dashboard-card"><div class="label">Crop Health</div><div class="big orange">Good</div><div class="mini">No visible stress trend</div></div>
+            <div class="dashboard-card"><div class="label">Efficiency</div><div class="big green">87%</div><div class="mini">System performance is efficient</div></div>
+        </div>
+        <div class="dashboard-row">
+            <div class="dashboard-card">
+                <div class="label">Recommended Next Steps</div>
+                <div class="list-group">
+                    <div class="list-item"><span>Increase irrigation in Zone 02</span><span class="badge orange">Priority</span></div>
+                    <div class="list-item"><span>Continue monitoring soil moisture</span><span class="badge green">Stable</span></div>
+                    <div class="list-item"><span>Pre-schedule fertilizer dosing</span><span class="badge blue">Next</span></div>
+                </div>
+            </div>
+            <div class="dashboard-card">
+                <div class="label">Decision Summary</div>
+                <div class="mini">AquaAI suggests keeping the current irrigation program while strengthening sensor feedback for Zone 02 later this cycle. This preserves water efficiency without compromising crop growth.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard" data-dashboard="analytics">
+    <div class="dashboard-shell">
+        <div class="dashboard-header">
+            <h2>📊 Farm Analytics</h2>
+            <span class="tag">Trend View</span>
+        </div>
+        <div class="dashboard-grid">
+            <div class="dashboard-card"><div class="label">Water Use</div><div class="big blue">1,250 L/ha</div><div class="mini">Compared with baseline</div></div>
+            <div class="dashboard-card"><div class="label">Growth Index</div><div class="big green">81/100</div><div class="mini">Healthy field performance</div></div>
+            <div class="dashboard-card"><div class="label">Energy</div><div class="big orange">5.8 kWh</div><div class="mini">Efficient automation</div></div>
+            <div class="dashboard-card"><div class="label">Yield Trend</div><div class="big green">+12%</div><div class="mini">Quarter-over-quarter growth</div></div>
+        </div>
+        <div class="dashboard-row">
+            <div class="dashboard-card">
+                <div class="label">Performance Comparison</div>
+                <div class="bar-stack">
+                    <div class="bar-line"><span>Water Efficiency</span><div class="bar-track"><span style="width:82%"></span></div><strong>82%</strong></div>
+                    <div class="bar-line"><span>Crop Health</span><div class="bar-track"><span style="width:76%"></span></div><strong>76%</strong></div>
+                    <div class="bar-line"><span>Yield Gain</span><div class="bar-track"><span style="width:88%"></span></div><strong>88%</strong></div>
+                </div>
+            </div>
+            <div class="dashboard-card">
+                <div class="label">Insight</div>
+                <div class="mini">Irrigation efficiency is above target while crop health remains stable. Water consumption is trending below the seasonal average for this crop stage.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard" data-dashboard="alerts">
+    <div class="dashboard-shell">
+        <div class="dashboard-header">
+            <h2>⚠ Field Alerts</h2>
+            <span class="tag">Monitoring</span>
+        </div>
+        <div class="dashboard-grid">
+            <div class="dashboard-card"><div class="label">Critical</div><div class="big red">01</div><div class="mini">Zone 02 moisture low</div></div>
+            <div class="dashboard-card"><div class="label">Warnings</div><div class="big orange">03</div><div class="mini">System check due</div></div>
+            <div class="dashboard-card"><div class="label">Resolved</div><div class="big green">07</div><div class="mini">Past issues cleared</div></div>
+            <div class="dashboard-card"><div class="label">Response</div><div class="big blue">5 min</div><div class="mini">Average alert response</div></div>
+        </div>
+        <div class="dashboard-row">
+            <div class="dashboard-card">
+                <div class="label">Alert Feed</div>
+                <div class="list-group">
+                    <div class="list-item"><span>Low moisture in Zone 02</span><span class="badge red">High</span></div>
+                    <div class="list-item"><span>Flow drop in pump line</span><span class="badge orange">Medium</span></div>
+                    <div class="list-item"><span>Night schedule pending</span><span class="badge blue">Low</span></div>
+                </div>
+            </div>
+            <div class="dashboard-card">
+                <div class="label">AI Summary</div>
+                <div class="mini">Priority alert is isolated to one field zone. Recommended action is to trigger a short irrigation pulse and inspect the valve actuator.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard" data-dashboard="settings">
+    <div class="dashboard-shell">
+        <div class="dashboard-header">
+            <h2>⚙ System Settings</h2>
+            <span class="tag">Config</span>
+        </div>
+        <div class="dashboard-grid">
+            <div class="dashboard-card"><div class="label">Sensor Drift</div><div class="big green">2.1%</div><div class="mini">Within calibration target</div></div>
+            <div class="dashboard-card"><div class="label">Threshold</div><div class="big blue">42%</div><div class="mini">Moisture trigger point</div></div>
+            <div class="dashboard-card"><div class="label">Auto Tune</div><div class="big green">On</div><div class="mini">Adaptive scheduling enabled</div></div>
+            <div class="dashboard-card"><div class="label">Sync</div><div class="big orange">Healthy</div><div class="mini">Cloud connection stable</div></div>
+        </div>
+        <div class="toggle-list">
+            <div class="toggle-row"><span>Automatic soil calibration</span><span class="switch on"></span></div>
+            <div class="toggle-row"><span>Alert email notifications</span><span class="switch on"></span></div>
+            <div class="toggle-row"><span>Night irrigation override</span><span class="switch"></span></div>
+            <div class="toggle-row"><span>AI recommendation approval</span><span class="switch on"></span></div>
+        </div>
+    </div>
+</div>
+
+</main>
+
+
+<script>
+
+/* =====================================================
+   CROP DATABASE
+===================================================== */
+
+const crops = {
+
+    rice:{
+        name:"Rice",
+        icon:"🌾",
+        duration:125,
+        minDuration:120,
+        maxDuration:150,
+        water:12000,
+        method:"Drip / Controlled Flood",
+        stage1:"Nursery / Establishment"
+    },
+
+    tomato:{
+        name:"Tomato",
+        icon:"🍅",
+        duration:90,
+        minDuration:90,
+        maxDuration:120,
+        water:4500,
+        method:"Drip Irrigation",
+        stage1:"Vegetative Growth"
+    },
+
+    sugarcane:{
+        name:"Sugarcane",
+        icon:"🎋",
+        duration:365,
+        minDuration:300,
+        maxDuration:450,
+        water:10000,
+        method:"Drip Irrigation",
+        stage1:"Establishment"
+    },
+
+    cotton:{
+        name:"Cotton",
+        icon:"🌿",
+        duration:170,
+        minDuration:150,
+        maxDuration:180,
+        water:5000,
+        method:"Drip / Sprinkler",
+        stage1:"Vegetative Growth"
+    },
+
+    groundnut:{
+        name:"Groundnut",
+        icon:"🥜",
+        duration:110,
+        minDuration:100,
+        maxDuration:120,
+        water:3500,
+        method:"Drip / Sprinkler",
+        stage1:"Vegetative Growth"
+    },
+
+    onion:{
+        name:"Onion",
+        icon:"🧅",
+        duration:120,
+        minDuration:100,
+        maxDuration:140,
+        water:3500,
+        method:"Drip Irrigation",
+        stage1:"Vegetative Growth"
+    }
+
+};
+
+let _aquaState = { isGenerating: false, isPumping: false };
+
+function _get(id){ return document.getElementById(id); }
+function _batch(actions){
+    requestAnimationFrame(()=>{
+        actions.forEach(a=>{
+            const el = _get(a.id);
+            if(!el) return;
+            if(a.type === 'text') el.innerText = a.value;
+            else if(a.type === 'html') el.innerHTML = a.value;
+            else if(a.type === 'style') el.style[a.prop] = a.value;
+            else if(a.type === 'class') el.className = a.value;
+        });
+    });
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+function formatDate(date){
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric"
+        }
+    );
+
+}
+
+
+/* =====================================================
+   GENERATE FARM PLAN
+===================================================== */
+
+function generateFarm(){
+
+    if(_aquaState.isGenerating) return;
+    _aquaState.isGenerating = true;
+
+    try {
+
+    const name =
+        document.getElementById("farmerName").value
+        || "Farmer";
+
+    const totalLand =
+        parseFloat(
+            document.getElementById("totalLand").value
+        ) || 0;
+
+    const cropArea =
+        parseFloat(
+            document.getElementById("cropArea").value
+        ) || 0;
+
+    const cropKey =
+        document.getElementById("crop").value;
+
+    const crop =
+        crops[cropKey];
+
+    const soil =
+        document.getElementById("soil").value;
+
+    const irrigation =
+        document.getElementById("irrigation").value;
+
+    const plantDateValue =
+        document.getElementById("plantDate").value;
+
+    const availableWater =
+        parseFloat(
+            document.getElementById("waterInput").value
+        ) || 0;
+
+
+    /* VALIDATION */
+
+    if(totalLand <= 0){
+
+        alert("Please enter a valid total land area.");
+
+        return;
+
+    }
+
+
+    if(cropArea <= 0 || cropArea > totalLand){
+
+        alert(
+            "Crop area must be greater than 0 and cannot exceed total land."
+        );
+
+        return;
+
+    }
+
+
+    /* OWNER */
+
+    const __updates = [];
+    __updates.push({type:'text', id:'owner', value: name});
+
+
+    /* LAND */
+
+    __updates.push({type:'text', id:'landDisplay', value: totalLand + " Acres"});
+
+
+    __updates.push({type:'text', id:'cropAreaDisplay', value: cropArea + " Acres"});
+
+
+    /* CROP */
+
+    __updates.push({type:'text', id:'cropTitle', value: crop.name.toUpperCase()});
+
+
+    __updates.push({type:'text', id:'cropName', value: crop.icon + " " + crop.name});
+
+
+    __updates.push({type:'text', id:'cropAreaCard', value: cropArea + " Acres"});
+
+
+    __updates.push({type:'text', id:'duration', value: crop.duration + " Days"});
+
+
+    __updates.push({type:'text', id:'growth', value: crop.minDuration + "–" + crop.maxDuration + " days"});
+
+
+    __updates.push({type:'text', id:'method', value: irrigation});
+
+
+    /* WATER */
+
+    let waterNeed =
+        crop.water *
+        cropArea;
+
+
+    /*
+       Irrigation efficiency adjustment
+    */
+
+    if(
+        irrigation === "Drip Irrigation"
+    ){
+
+        waterNeed *= 0.70;
+
+    }
+
+    else if(
+        irrigation === "Sprinkler"
+    ){
+
+        waterNeed *= 0.85;
+
+    }
+
+
+    waterNeed =
+        Math.round(waterNeed);
+
+
+    __updates.push({type:'text', id:'waterNeed', value: waterNeed.toLocaleString() + " L/day"});
+
+
+    /* PLANTING DATE */
+
+    let plantDate;
+
+    if(plantDateValue){
+
+        plantDate =
+            new Date(plantDateValue);
+
+    }
+
+    else{
+
+        plantDate =
+            new Date();
+
+    }
+
+
+    /* HARVEST */
+
+    let harvestDate =
+        new Date(plantDate);
+
+    harvestDate.setDate(
+        harvestDate.getDate() +
+        crop.duration
+    );
+
+
+    __updates.push({type:'text', id:'harvest', value: formatDate(harvestDate)});
+
+
+    __updates.push({type:'text', id:'tableCrop', value: crop.icon + " " + crop.name});
+
+
+    __updates.push({type:'text', id:'tableArea', value: cropArea + " Acres"});
+
+
+    __updates.push({type:'text', id:'tableDuration', value: crop.duration + " Days"});
+
+
+    __updates.push({type:'text', id:'tablePlant', value: formatDate(plantDate)});
+
+
+    __updates.push({type:'text', id:'tableHarvest', value: formatDate(harvestDate)});
+
+
+    __updates.push({type:'text', id:'tableStatus', value: "GROWING PLAN"});
+
+
+    /* CURRENT STAGE */
+
+    let today =
+        new Date();
+
+    let daysPassed =
+        Math.max(
+            0,
+            Math.floor(
+                (today - plantDate)
+                /
+                (1000*60*60*24)
+            )
+        );
+
+
+    let progress =
+        Math.min(
+            100,
+            Math.round(
+                (daysPassed /
+                crop.duration) *
+                100
+            )
+        );
+
+
+    if(daysPassed === 0){
+
+        __updates.push({type:'text', id:'stage', value: "Planting / Establishment"});
+
+    }
+
+    else if(
+        progress < 30
+    ){
+
+        __updates.push({type:'text', id:'stage', value: "Early Growth"});
+
+    }
+
+    else if(
+        progress < 60
+    ){
+
+        __updates.push({type:'text', id:'stage', value: "Vegetative Growth"});
+
+    }
+
+    else if(
+        progress < 85
+    ){
+
+        __updates.push({type:'text', id:'stage', value: "Flowering / Crop Development"});
+
+    }
+
+    else{
+
+        __updates.push({type:'text', id:'stage', value: "Maturity / Harvest Preparation"});
+
+    }
+
+
+    __updates.push({type:'style', id:'growthBar', prop: 'width', value: progress + "%"});
+
+
+    /* WATER BUDGET */
+
+    let estimatedDaily =
+        waterNeed;
+
+    let daysCovered =
+        availableWater /
+        estimatedDaily;
+
+
+    __updates.push({type:'text', id:'waterLitres', value: availableWater.toLocaleString() + " L"});
+
+
+    let tankPercent =
+        Math.min(
+            100,
+            Math.round(
+                (availableWater /
+                50000) *
+                100
+            )
+        );
+
+
+    __updates.push({type:'text', id:'waterPercent', value: tankPercent + "%"});
+
+
+    __updates.push({type:'style', id:'water', prop:'height', value: tankPercent + "%"});
+
+
+    /* AI STRATEGY */
+
+    let strategy =
+        "Precision Zone Irrigation";
+
+
+    if(
+        irrigation ===
+        "Flood Irrigation"
+    ){
+
+        strategy =
+            "Convert to controlled irrigation";
+
+    }
+
+    if (translationState.current === 'ta') {
+        strategy = strategy === "Precision Zone Irrigation"
+            ? "சரியான மண்டல பாசனம்"
+            : "கட்டுப்படுத்தப்பட்ட பாசனமாக மாற்றவும்";
+    }
+
+    __updates.push({type:'text', id:'strategy', value: strategy});
+
+
+    /* AI PRIORITY */
+
+    let priority =
+        availableWater >= estimatedDaily
+        ? "READY"
+        : "LOW WATER";
+
+    if (translationState.current === 'ta') {
+        priority = availableWater >= estimatedDaily ? "தயார்" : "குறைந்த நீர்";
+    }
+
+
+    __updates.push({type:'text', id:'priority', value: priority});
+
+
+    if(
+        availableWater >= estimatedDaily
+    ){
+
+        __updates.push({type:'text', id:'waterAlert', value: translationState.current === 'ta'
+            ? "✓ தற்போதைய நீர் இருப்பு தோராயமாக " + Math.floor(daysCovered) + " நாள்கள் பாசனத்தை ஆதரிக்கும்."
+            : "✓ Water reserve can support approximately " + Math.floor(daysCovered) + " day(s) of estimated irrigation."});
+        __updates.push({type:'class', id:'waterAlert', value: "alert success"});
+
+    }
+
+    else{
+
+        __updates.push({type:'text', id:'waterAlert', value: translationState.current === 'ta'
+            ? "⚠ தற்போதைய நீர் இருப்பு தோராயமான தினசரி தேவையை முழுமையாக பூர்த்தி செய்யாமல் போகலாம்."
+            : "⚠ Current water reserve may not cover the estimated daily requirement."});
+        __updates.push({type:'class', id:'waterAlert', value: "alert"});
+
+    }
+
+
+    /* AI MESSAGE */
+
+    if (translationState.current === 'ta') {
+        __updates.push({type:'text', id:'aiTitle', value: crop.name + " திட்டம் வெற்றிகரமாக உருவாக்கப்பட்டது."});
+        __updates.push({type:'html', id:'aiText', value:
+            "<b>" + name + "</b>, உங்கள் பண்ணையில் <strong>" + totalLand + " ஏக்கர்</strong> நிலம் உள்ளது; அதில் <strong>" + cropArea + " ஏக்கர்</strong> " + crop.name + " பயிருக்கு ஒதுக்கப்பட்டுள்ளது.<br><br>" +
+            "தேர்ந்தெடுக்கப்பட்ட பயிரின் அடிப்படையில், தோராயமான வளர்ச்சி காலம் <strong>" + crop.duration + " நாட்கள்</strong> ஆகும். " +
+            "<strong>" + formatDate(plantDate) + "</strong> நாளில் நடவு செய்தால், தோராயமான அறுவடை காலம் <strong>" + formatDate(harvestDate) + "</strong> ஆக இருக்கும்.<br><br>" +
+            "தோராயமான நீர் தேவை <strong>" + waterNeed.toLocaleString() + " லிட்டர்/நாள்</strong> ஆகும்; இது மண் ஈரப்பதம், வானிலை, பயிர் வகை மற்றும் வயலின் நிலைமைகளால் மாறலாம்."});
+    } else {
+        __updates.push({type:'text', id:'aiTitle', value: crop.name + " plan generated successfully."});
+        __updates.push({type:'html', id:'aiText', value:
+            "<b>" + name + "</b>, your farm contains <strong>" + totalLand + " acres</strong>, with <strong>" + cropArea + " acres</strong> allocated to " + crop.name + ".<br><br>" +
+            "Based on the selected crop, the estimated growth period is around <strong>" + crop.duration + " days</strong>. " +
+            "If planted on <strong>" + formatDate(plantDate) + "</strong>, the estimated harvest window is around <strong>" + formatDate(harvestDate) + "</strong>.<br><br>" +
+            "Estimated water demand is approximately <strong>" + waterNeed.toLocaleString() + " litres/day</strong>, subject to actual soil moisture, weather, crop variety and field conditions."});
+    }
+
+
+    /* WEATHER */
+
+    _batch(__updates);
+    setTimeout(updateWeather, 0);
+
+    } finally {
+        _aquaState.isGenerating = false;
+    }
+
+}
+
+
+/* =====================================================
+   WEATHER SIMULATION
+===================================================== */
+
+function updateWeather(){
+
+    let temperature =
+        Math.floor(
+            29 +
+            Math.random()*8
+        );
+
+    let humidity =
+        Math.floor(
+            50 +
+            Math.random()*25
+        );
+
+    let rain =
+        Math.floor(
+            Math.random()*45
+        );
+
+
+    document.getElementById("temperature")
+        .innerText =
+        temperature + "°C";
+
+
+    document.getElementById("humidity")
+        .innerText =
+        humidity + "%";
+
+
+    document.getElementById("rain")
+        .innerText =
+        rain + "%";
+
+
+    let icon =
+        rain > 35
+        ? "🌧️"
+        : rain > 18
+        ? "🌥️"
+        : "☀️";
+
+
+    document.getElementById("weatherIcon")
+        .innerText =
+        icon;
+
+    const isTamil = translationState.current === 'ta';
+
+    if(rain > 35){
+
+        document.getElementById("weatherText")
+            .innerText = isTamil
+            ? "மழை சாத்தியம் — பாசனம் தாமதமாகலாம்"
+            : "Rain likely — irrigation may be delayed";
+
+
+        document.getElementById("weatherAlert")
+            .innerText = isTamil
+            ? "🌧️ AI பரிந்துரை: மழை நிகழ்தகவு அதிகமாக இருப்பதால் பாசனத்தை தாமதப்படுத்துவது நல்லது."
+            : "🌧️ AI recommendation: consider delaying irrigation because rainfall probability is high.";
+
+
+    }
+
+    else if(
+        temperature >= 34 &&
+        rain < 20
+    ){
+
+        document.getElementById("weatherText")
+            .innerText = isTamil
+            ? "சூடான மற்றும் வறண்ட நிலை"
+            : "Hot and dry conditions";
+
+
+        document.getElementById("weatherAlert")
+            .innerText = isTamil
+            ? "☀️ AI பரிந்துரை: வெப்பம் மற்றும் குறைந்த மழை நிகழ்தகவு காரணமாக பாசன முன்னுரிமை அதிகரித்துள்ளது."
+            : "☀️ AI recommendation: irrigation priority increased due to heat and low rainfall probability.";
+
+    }
+
+    else{
+
+        document.getElementById("weatherText")
+            .innerText = isTamil
+            ? "சிறந்த பாசன நிலைமைகள்"
+            : "Favorable irrigation conditions";
+
+
+        document.getElementById("weatherAlert")
+            .innerText = isTamil
+            ? "✓ தற்போதைய வானிலை நிலைகள் கட்டுப்படுத்தப்பட்ட பாசனத்திற்கு சாதகமாக உள்ளன."
+            : "✓ Current weather conditions favor controlled irrigation.";
+
+    }
+
+}
+
+const pollingState = { timer: null, intervalMs: 30000 };
+
+function pollSystem() {
+    updateWeather();
+
+    const waterFill = document.getElementById('water');
+    const waterPercent = document.getElementById('waterPercent');
+    const waterLitres = document.getElementById('waterLitres');
+
+    if (!waterFill || !waterPercent || !waterLitres) return;
+
+    const currentValue = Number(waterPercent.dataset.value || waterPercent.textContent.replace('%', '')) || 64;
+    const drift = _aquaState.isPumping ? 1.8 : -1.1;
+    const nextValue = Math.min(92, Math.max(24, currentValue + (Math.random() * 4 - 1.5) + drift));
+    const litres = Math.round((nextValue / 100) * 78000);
+
+    waterPercent.dataset.value = String(nextValue);
+    waterPercent.textContent = Math.round(nextValue) + '%';
+    waterLitres.textContent = litres.toLocaleString() + ' L';
+    waterFill.style.height = nextValue + '%';
+}
+
+function startPolling() {
+    if (pollingState.timer) return;
+    pollingState.timer = setInterval(pollSystem, pollingState.intervalMs);
+}
+
+function stopPolling() {
+    if (!pollingState.timer) return;
+    clearInterval(pollingState.timer);
+    pollingState.timer = null;
+}
+
+
+/* =====================================================
+   PUMP
+===================================================== */
+
+function setPumpState(isOn, label, message, success){
+
+    _aquaState.isPumping = isOn;
+
+    const pumpStatus = document.getElementById("pumpStatus");
+    if(pumpStatus){
+        pumpStatus.innerHTML =
+            "<span class='" + (isOn ? "green" : "red") + "'>● " + label + "</span>";
+    }
+
+    if(message){
+        showSystemAlert(message, success);
+    }
+
+}
+
+
+function startPump(){
+
+    if(_aquaState.isPumping) return;
+    setPumpState(
+        true,
+        "PUMP ON",
+        "💧 Pump started. AquaMind is delivering water to the highest-priority zone.",
+        true
+    );
+
+}
+
+
+function stopPump(){
+
+    if(!_aquaState.isPumping) return;
+    setPumpState(
+        false,
+        "PUMP OFF",
+        "■ Irrigation stopped safely.",
+        false
+    );
+
+}
+
+
+function autoIrrigation(){
+
+    if(_aquaState.isPumping) return;
+
+    generateFarm();
+
+    setTimeout(
+        () => {
+            setPumpState(
+                true,
+                "AI AUTO MODE",
+                "✦ AI Auto Mode active. The system will prioritize only zones requiring irrigation.",
+                true
+            );
+        },
+        700
+    );
+
+}
+
+
+function resetSystem(){
+
+    _aquaState.isPumping = false;
+
+    document.getElementById("pumpStatus")
+        .innerText =
+        "PUMP OFF";
+
+
+    document.getElementById("systemAlert")
+        .style.display =
+        "none";
+
+}
+
+
+/* =====================================================
+   ALERT
+===================================================== */
+
+function showSystemAlert(
+    message,
+    success
+){
+
+    let box =
+        document.getElementById(
+            "systemAlert"
+        );
+
+
+    box.style.display =
+        "block";
+
+
+    box.className =
+        success
+        ? "alert success"
+        : "alert";
+
+
+    box.innerText =
+        message;
+
+}
+
+
+/* =====================================================
+   SIDEBAR NAVIGATION
+===================================================== */
+
+const navButtons = document.querySelectorAll('.nav button:not(#translateBtn)');
+const dashboards = document.querySelectorAll('.dashboard');
+const translationState = { current: 'en' };
+
+function showDashboard(targetDashboard) {
+   dashboards.forEach((dashboard) => {
+       dashboard.classList.toggle('active', dashboard.dataset.dashboard === targetDashboard);
+   });
+}
+
+function applyLanguage(lang) {
+   translationState.current = lang;
+   const isTamil = lang === 'ta';
+
+   document.querySelectorAll('[data-i18n]').forEach((el) => {
+       const nextText = isTamil ? el.dataset.ta : el.dataset.en;
+       if (nextText) {
+           el.textContent = nextText;
+       }
+   });
+
+   const farmerInput = document.getElementById('farmerName');
+   if (farmerInput) {
+       farmerInput.placeholder = isTamil ? 'உங்கள் பெயரை உள்ளிடவும்' : 'Enter your name';
+   }
+
+   const translateBtn = document.getElementById('translateBtn');
+   if (translateBtn) {
+       translateBtn.textContent = isTamil ? '🌐 English' : '🌐 தமிழ்';
+       translateBtn.setAttribute('data-lang', lang);
+   }
+
+   const activeButton = document.querySelector('.nav button.active');
+   if (activeButton) {
+       const title = document.querySelector('.topbar h1');
+       const subtitle = document.querySelector('.topbar p');
+       if (title && subtitle) {
+           title.textContent = isTamil && activeButton.dataset.titleTa
+               ? activeButton.dataset.titleTa
+               : (activeButton.dataset.title || title.textContent);
+           subtitle.textContent = isTamil && activeButton.dataset.subtitleTa
+               ? activeButton.dataset.subtitleTa
+               : (activeButton.dataset.subtitle || subtitle.textContent);
+       }
+   }
+}
+
+navButtons.forEach((button) => {
+   button.addEventListener('click', () => {
+       navButtons.forEach((item) => {
+           item.classList.toggle('active', item === button);
+           item.setAttribute('aria-pressed', item === button ? 'true' : 'false');
+       });
+
+       showDashboard(button.dataset.dashboard || 'overview');
+
+       const title = document.querySelector('.topbar h1');
+       const subtitle = document.querySelector('.topbar p');
+
+       if (title && subtitle) {
+           const nextTitle = translationState.current === 'ta' && button.dataset.titleTa
+               ? button.dataset.titleTa
+               : (button.dataset.title || title.textContent);
+           const nextSubtitle = translationState.current === 'ta' && button.dataset.subtitleTa
+               ? button.dataset.subtitleTa
+               : (button.dataset.subtitle || subtitle.textContent);
+
+           title.textContent = nextTitle;
+           subtitle.textContent = nextSubtitle;
+       }
+   });
+});
+
+document.getElementById('translateBtn')?.addEventListener('click', () => {
+   const nextLang = translationState.current === 'en' ? 'ta' : 'en';
+   applyLanguage(nextLang);
+   generateFarm();
+});
+
+
+// Toggle handlers for slide-style on/off switches
+document.querySelectorAll('.switch').forEach((sw, idx) => {
+    // make the element accessible as a switch
+    sw.setAttribute('role', 'switch');
+    sw.setAttribute('tabindex', '0');
+    sw.setAttribute('aria-checked', 'false');
+
+    // click toggles visual state and aria attribute
+    sw.addEventListener('click', () => {
+        const on = sw.classList.toggle('on');
+        sw.setAttribute('aria-checked', on ? 'true' : 'false');
+
+        // show a brief system alert to confirm action (non-blocking)
+        showSystemAlert(on ? '✓ Switch turned ON' : '✓ Switch turned OFF', on);
+        setTimeout(() => {
+            const box = document.getElementById('systemAlert');
+            if (box) box.style.display = 'none';
+        }, 1400);
+    });
+
+    // support keyboard activation (Enter / Space)
+    sw.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            sw.click();
+        }
+    });
+});
+
+
+/* =====================================================
+   LIVE POLLING UPDATE
+===================================================== */
+
+startPolling();
+
+/* =====================================================
+   DEFAULT DATE
+===================================================== */
+
+document.getElementById(
+   "plantDate"
+).valueAsDate =
+new Date();
+
+
+/* INITIAL */
+
+showDashboard('overview');
+generateFarm();
+
+</script>
+
+</body>
+</html>
