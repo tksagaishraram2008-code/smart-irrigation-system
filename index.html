@@ -44,6 +44,183 @@ body{
     background-attachment: fixed;
 }
 
+.app-shell.hidden,
+.login-screen.hidden {
+   display:none;
+}
+
+.login-screen {
+   min-height:100vh;
+   display:grid;
+   place-items:center;
+   padding:24px;
+   background:
+       radial-gradient(circle at top left, rgba(255,181,71,.22), transparent 25%),
+       radial-gradient(circle at bottom right, rgba(47,134,255,.15), transparent 30%),
+       linear-gradient(180deg, #fffdf9 0%, #eefaf5 50%, #f3f9ff 100%);
+}
+
+.login-card {
+   width:min(100%, 450px);
+   background:rgba(255,255,255,.9);
+   border:1px solid rgba(26,47,43,.08);
+   box-shadow:0 24px 48px rgba(17,41,33,.1);
+   border-radius:28px;
+   padding:30px 26px;
+   backdrop-filter:blur(12px);
+}
+
+.login-brand {
+   display:flex;
+   justify-content:center;
+   margin-bottom:12px;
+}
+
+.login-brand img {
+   width:180px;
+   max-width:100%;
+   height:auto;
+}
+
+.login-card h2 {
+   text-align:center;
+   font-size:28px;
+   margin-bottom:8px;
+}
+
+.login-card p {
+   color:var(--muted);
+   text-align:center;
+   line-height:1.6;
+   margin-bottom:20px;
+}
+
+.login-form {
+   display:grid;
+   gap:14px;
+}
+
+.login-form .field {
+   display:grid;
+   gap:7px;
+}
+
+.login-form .field label {
+   color:var(--muted);
+   font-size:11px;
+   text-transform:uppercase;
+   letter-spacing:.08em;
+   font-weight:700;
+}
+
+.login-form input {
+   width:100%;
+   padding:13px 14px;
+   border-radius:12px;
+   border:1px solid var(--border);
+   background:#f9fdfb;
+   color:var(--text);
+   font-size:14px;
+   outline:none;
+   position:relative;
+   z-index:2;
+   pointer-events:auto;
+}
+
+.login-form input:focus {
+   border-color:var(--green);
+   box-shadow:0 0 0 3px rgba(47,191,113,.15);
+}
+
+.login-form,
+.login-form .field,
+.login-card,
+.login-screen {
+   position:relative;
+   z-index:1;
+}
+
+.login-button,
+.logout-btn,
+.auth-toggle button {
+   border:none;
+   border-radius:12px;
+   font-weight:800;
+   cursor:pointer;
+   transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.login-button {
+   margin-top:6px;
+   padding:14px 18px;
+   background:linear-gradient(135deg, var(--green), #4bd98a);
+   color:#062015;
+   box-shadow:0 14px 26px rgba(43,182,115,.18);
+}
+
+.login-button:hover,
+.logout-btn:hover,
+.auth-toggle button:hover {
+   transform:translateY(-1px);
+}
+
+.login-error {
+   min-height:20px;
+   margin-top:8px;
+   color:#c34242;
+   font-size:12px;
+   font-weight:700;
+   text-align:center;
+}
+
+.auth-toggle {
+   display:grid;
+   grid-template-columns:1fr 1fr;
+   gap:8px;
+   margin-bottom:18px;
+}
+
+.auth-toggle button {
+   padding:10px 12px;
+   background:#edf5ef;
+   color:#234234;
+   border:1px solid rgba(26,47,43,.08);
+}
+
+.auth-toggle button.active {
+   background:linear-gradient(135deg, var(--green), #4bd98a);
+   color:#062015;
+   box-shadow:0 10px 20px rgba(43,182,115,.18);
+}
+
+.auth-form {
+   display:none;
+}
+
+.auth-form.active {
+   display:block;
+}
+
+.form-note {
+   font-size:12px;
+   text-align:center;
+   color:var(--muted);
+   margin-top:10px;
+}
+
+.topbar-actions {
+   display:flex;
+   align-items:center;
+   gap:12px;
+}
+
+.logout-btn {
+   padding:10px 14px;
+   background:#edf5ef;
+   color:#234234;
+   border:1px solid rgba(26,47,43,.08);
+}
+
 /* =========================
    SIDEBAR
 ========================= */
@@ -1026,8 +1203,76 @@ body{
 
 <body>
 
+<div id="loginScreen" class="login-screen">
+   <div class="login-card">
+       <div class="login-brand">
+           <img src="logo.png" alt="Smart irrigation logo">
+       </div>
+       <h2 id="authTitle">Login to your account</h2>
+       <p id="authSubtitle">Enter your name, password, and email or phone number to access your smart irrigation dashboard.</p>
+
+       <div class="auth-toggle" aria-label="Authentication mode">
+          <button type="button" id="showLoginBtn" class="active">Login</button>
+          <button type="button" id="showRegisterBtn">Register</button>
+       </div>
+
+       <form id="loginForm" class="login-form auth-form active" novalidate>
+           <div class="field">
+               <label for="loginName">Full Name</label>
+               <input id="loginName" name="name" type="text" placeholder="Enter your full name" autocomplete="name" required inputmode="text">
+           </div>
+
+           <div class="field">
+               <label for="loginIdentifier">Email or Phone Number</label>
+               <input id="loginIdentifier" name="identifier" type="text" placeholder="name@example.com or 9876543210" autocomplete="username" required inputmode="email">
+           </div>
+
+           <div class="field">
+               <label for="loginPassword">Password</label>
+               <input id="loginPassword" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required minlength="6">
+           </div>
+
+           <button type="submit" class="login-button">Login to Dashboard</button>
+           <p id="loginError" class="login-error" aria-live="polite"></p>
+       </form>
+
+       <form id="registerForm" class="login-form auth-form" novalidate>
+           <div class="field">
+               <label for="registerName">Full Name</label>
+               <input id="registerName" name="name" type="text" placeholder="Enter your full name" autocomplete="name" required>
+           </div>
+
+           <div class="field">
+               <label for="registerIdentifier">Email Address</label>
+               <input id="registerIdentifier" name="identifier" type="email" placeholder="name@example.com" autocomplete="username" required>
+           </div>
+
+           <div class="field">
+               <label for="registerPhone">Phone Number</label>
+               <input id="registerPhone" name="phone" type="tel" placeholder="9876543210" autocomplete="tel" required>
+           </div>
+
+           <div class="field">
+               <label for="registerPassword">Password</label>
+               <input id="registerPassword" name="password" type="password" placeholder="Create a password" autocomplete="new-password" required minlength="6">
+           </div>
+
+           <div class="field">
+               <label for="registerConfirmPassword">Confirm Password</label>
+               <input id="registerConfirmPassword" name="confirmPassword" type="password" placeholder="Confirm your password" autocomplete="new-password" required minlength="6">
+           </div>
+
+           <button type="submit" class="login-button">Create Account</button>
+           <p id="registerError" class="login-error" aria-live="polite"></p>
+           <div class="form-note">Use a valid email format like name@example.com.</div>
+       </form>
+   </div>
+</div>
+
+<div id="appShell" class="app-shell hidden">
+
 <!-- =========================
-     SIDEBAR
+    SIDEBAR
 ========================= -->
 
 <aside class="sidebar">
@@ -1072,9 +1317,12 @@ body{
         </p>
     </div>
 
-    <div class="live">
-        <span class="dot"></span>
-        AI SYSTEM ONLINE
+    <div class="topbar-actions">
+        <div class="live">
+            <span class="dot"></span>
+            AI SYSTEM ONLINE
+        </div>
+        <button type="button" id="logoutBtn" class="logout-btn">Logout</button>
     </div>
 
 </div>
@@ -1657,6 +1905,16 @@ body{
         AI-managed reserve
     </p>
 
+    <!-- Water type selector (fresh/saline) -->
+    <div style="margin-top:8px;">
+        <label for="waterTypeSelect" style="font-size:0.9rem;">Water Type:</label>
+        <select id="waterTypeSelect" style="padding:6px 8px; margin-left:6px;">
+            <option value="fresh">Freshwater</option>
+            <option value="brackish">Brackish</option>
+            <option value="saline">Saline</option>
+        </select>
+    </div>
+
 </div>
 
 </div>
@@ -1870,6 +2128,20 @@ body{
     ↻ RESET
 </button>
 
+<!-- Motor server connection and water type -->
+<div style="margin-top:12px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+    <label for="motorServer" style="font-size:0.9rem;">Motor Server</label>
+    <input id="motorServer" type="text" placeholder="http://192.168.1.50:5000" style="min-width:220px; padding:6px;">
+    <button class="control" style="padding:6px 10px;" onclick="connectMotorServer()">Connect</button>
+    <span id="motorConnectionStatus" style="font-size:0.9rem; color:#777;">Disconnected</span>
+    <label for="waterTypeSelect" style="margin-left:8px; font-size:0.9rem;">Water Type</label>
+    <select id="waterTypeSelect" style="padding:6px 8px;">
+        <option value="fresh">Freshwater</option>
+        <option value="brackish">Brackish</option>
+        <option value="saline">Saline</option>
+    </select>
+</div>
+
 </div>
 
 
@@ -2057,6 +2329,21 @@ body{
                     <div class="toggle-row"><span>Soil Moisture Alarm</span><span class="switch on"></span></div>
                     <div class="toggle-row"><span>Night Watering</span><span class="switch"></span></div>
                     <div class="toggle-row"><span>Leak Detection</span><span class="switch on"></span></div>
+                </div>
+                <div style="margin-top:12px;">
+                    <label for="motorServer" style="font-size:0.9rem;">Motor Server</label>
+                    <input id="motorServer" type="text" placeholder="http://192.168.1.50:5000" style="min-width:220px; padding:6px; margin-left:8px;">
+                    <button class="control" style="padding:6px 10px; margin-left:8px;" onclick="connectMotorServer()">Connect</button>
+                    <span id="motorConnectionStatus" style="margin-left:10px; font-weight:700; color:#2e7d32;">Disconnected</span>
+                    <div style="margin-top:10px;">
+                        <button class="control start" onclick="startPump()">Start</button>
+                        <button class="control stop" onclick="stopPump()" style="margin-left:8px;">Stop</button>
+                        <label for="waterTypeSelect" style="margin-left:8px; font-size:0.9rem;">Water Type:</label>
+                        <select id="waterTypeSelect" style="padding:6px 8px; margin-left:6px;">
+                            <option value="fresh">Fresh</option>
+                            <option value="recycled">Recycled</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2865,6 +3152,14 @@ function startPump(){
         true
     );
 
+    // If a motor server is configured and connected, send the start command to the motor controller
+    if(_aquaState.motorServerUrl && _aquaState.motorConnected){
+        sendPumpCommand('start');
+    } else {
+        // show a gentle notice that the pump action is simulated locally
+        showSystemAlert('Motor server not connected — pump action simulated locally.', false);
+    }
+
 }
 
 
@@ -2877,6 +3172,12 @@ function stopPump(){
         "■ Irrigation stopped safely.",
         false
     );
+
+    if(_aquaState.motorServerUrl && _aquaState.motorConnected){
+        sendPumpCommand('stop');
+    } else {
+        showSystemAlert('Motor server not connected — pump stop simulated locally.', false);
+    }
 
 }
 
@@ -3084,7 +3385,366 @@ new Date();
 showDashboard('overview');
 generateFarm();
 
+
+const AUTH_STORAGE_KEY = 'smartIrrigationUser';
+const AUTH_USERS_KEY = 'smartIrrigationUsers';
+const loginScreen = document.getElementById('loginScreen');
+const appShell = document.getElementById('appShell');
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+const loginError = document.getElementById('loginError');
+const registerError = document.getElementById('registerError');
+const logoutBtn = document.getElementById('logoutBtn');
+const showLoginBtn = document.getElementById('showLoginBtn');
+const showRegisterBtn = document.getElementById('showRegisterBtn');
+const authTitle = document.getElementById('authTitle');
+const authSubtitle = document.getElementById('authSubtitle');
+
+function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+}
+
+function isValidPhoneNumber(value) {
+    const digits = value.replace(/\D/g, '');
+    return /^\d{10,15}$/.test(digits);
+}
+
+function isValidIdentifier(value) {
+    const cleanValue = value.trim();
+    return isValidEmail(cleanValue) || isValidPhoneNumber(cleanValue);
+}
+
+function validateLoginForm(name, identifier, password) {
+    if (!name || name.trim().length < 2) {
+        return 'Please enter your full name.';
+    }
+
+    if (!identifier || !identifier.trim()) {
+        return 'Please enter your email address or phone number.';
+    }
+
+    if (!isValidIdentifier(identifier)) {
+        return 'Use a valid email format like name@example.com or a valid phone number.';
+    }
+
+    if (!password || password.length < 6) {
+        return 'Password must be at least 6 characters long.';
+    }
+
+    return '';
+}
+
+function validateRegisterForm(name, identifier, phone, password, confirmPassword) {
+    if (!name || name.trim().length < 2) {
+        return 'Please enter your full name.';
+    }
+
+    if (!identifier || !isValidEmail(identifier)) {
+        return 'Please enter a valid email address in the format name@example.com.';
+    }
+
+    if (!phone || !isValidPhoneNumber(phone)) {
+        return 'Please enter a valid 10 to 15 digit phone number.';
+    }
+
+    if (!password || password.length < 6) {
+        return 'Password must be at least 6 characters long.';
+    }
+
+    if (password !== confirmPassword) {
+        return 'Passwords do not match.';
+    }
+
+    return '';
+}
+
+function getRegisteredUsers() {
+    try {
+        const savedUsers = JSON.parse(localStorage.getItem(AUTH_USERS_KEY) || '[]');
+        return Array.isArray(savedUsers) ? savedUsers : [];
+    } catch (error) {
+        localStorage.removeItem(AUTH_USERS_KEY);
+        return [];
+    }
+}
+
+function saveRegisteredUsers(users) {
+    localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(users));
+}
+
+function switchAuthMode(mode) {
+    const isLogin = mode === 'login';
+    if (loginForm) loginForm.classList.toggle('active', isLogin);
+    if (registerForm) registerForm.classList.toggle('active', !isLogin);
+    if (showLoginBtn) showLoginBtn.classList.toggle('active', isLogin);
+    if (showRegisterBtn) showRegisterBtn.classList.toggle('active', !isLogin);
+    if (authTitle) authTitle.textContent = isLogin ? 'Login to your account' : 'Create your account';
+    if (authSubtitle) authSubtitle.textContent = isLogin
+        ? 'Enter your name, password, and email or phone number to access your smart irrigation dashboard.'
+        : 'Create a new account to access your smart irrigation dashboard.';
+
+    if (loginError) loginError.textContent = '';
+    if (registerError) registerError.textContent = '';
+
+    const fieldToFocus = isLogin ? document.getElementById('loginName') : document.getElementById('registerName');
+    if (fieldToFocus) {
+        window.setTimeout(() => fieldToFocus.focus(), 50);
+    }
+}
+
+function showAuthenticatedApp(user) {
+    if (appShell) {
+        appShell.classList.remove('hidden');
+    }
+    if (loginScreen) {
+        loginScreen.classList.add('hidden');
+    }
+
+    const liveBadge = document.querySelector('.live');
+    if (liveBadge && user?.name) {
+        liveBadge.innerHTML = '<span class="dot"></span>' + user.name.toUpperCase() + ' ONLINE';
+    }
+}
+
+function showLoginScreen() {
+    if (loginScreen) {
+        loginScreen.classList.remove('hidden');
+    }
+    if (appShell) {
+        appShell.classList.add('hidden');
+    }
+    if (loginError) {
+        loginError.textContent = 'Please login to continue.';
+    }
+    switchAuthMode('login');
+
+    const firstField = document.getElementById('loginName');
+    if (firstField) {
+        window.setTimeout(() => firstField.focus(), 50);
+    }
+}
+
+function handleRegisterSubmit(event) {
+    event.preventDefault();
+    const nameInput = document.getElementById('registerName');
+    const identifierInput = document.getElementById('registerIdentifier');
+    const phoneInput = document.getElementById('registerPhone');
+    const passwordInput = document.getElementById('registerPassword');
+    const confirmInput = document.getElementById('registerConfirmPassword');
+
+    if (!nameInput || !identifierInput || !phoneInput || !passwordInput || !confirmInput) {
+        return;
+    }
+
+    const name = nameInput.value;
+    const identifier = identifierInput.value;
+    const phone = phoneInput.value;
+    const password = passwordInput.value;
+    const confirmPassword = confirmInput.value;
+    const errorMessage = validateRegisterForm(name, identifier, phone, password, confirmPassword);
+
+    if (errorMessage) {
+        if (registerError) registerError.textContent = errorMessage;
+        return;
+    }
+
+    const users = getRegisteredUsers();
+    const normalizedIdentifier = identifier.trim().toLowerCase();
+    const existingUser = users.find((user) => user.email && user.email.toLowerCase() === normalizedIdentifier);
+    if (existingUser) {
+        if (registerError) registerError.textContent = 'An account with this email already exists.';
+        return;
+    }
+
+    const newUser = {
+        name: name.trim(),
+        email: identifier.trim().toLowerCase(),
+        phone: phone.trim(),
+        password: password,
+        identifier: identifier.trim().toLowerCase()
+    };
+
+    users.push(newUser);
+    saveRegisteredUsers(users);
+    if (registerForm) registerForm.reset();
+    if (registerError) registerError.textContent = '';
+    switchAuthMode('login');
+    if (loginError) loginError.textContent = 'Registration successful. Please login with your registered details.';
+    if (document.getElementById('loginName')) document.getElementById('loginName').focus();
+}
+
+function handleLoginSubmit(event) {
+    event.preventDefault();
+    const nameInput = document.getElementById('loginName');
+    const identifierInput = document.getElementById('loginIdentifier');
+    const passwordInput = document.getElementById('loginPassword');
+
+    if (!nameInput || !identifierInput || !passwordInput) {
+        return;
+    }
+
+    const name = nameInput.value;
+    const identifier = identifierInput.value;
+    const password = passwordInput.value;
+    const errorMessage = validateLoginForm(name, identifier, password);
+
+    if (errorMessage) {
+        loginError.textContent = errorMessage;
+        const firstInvalidField = [nameInput, identifierInput, passwordInput].find((field) => field.value.trim() === '' || field.value.length < (field.type === 'password' ? 6 : 1));
+        if (firstInvalidField) {
+            firstInvalidField.focus();
+        }
+        return;
+    }
+
+    const registeredUsers = getRegisteredUsers();
+    const cleanName = name.trim().toLowerCase();
+    const cleanIdentifier = identifier.trim().toLowerCase();
+    const matchingUser = registeredUsers.find((user) => {
+        const userName = (user.name || '').trim().toLowerCase();
+        const email = (user.email || '').trim().toLowerCase();
+        const phone = (user.phone || '').trim();
+        const usedIdentifier = email || phone;
+        return userName === cleanName && usedIdentifier === cleanIdentifier && user.password === password;
+    });
+
+    if (!matchingUser) {
+        loginError.textContent = 'Invalid login details. Please register first or check your email/phone and password.';
+        return;
+    }
+
+    const user = {
+        name: matchingUser.name,
+        identifier: matchingUser.identifier || matchingUser.email,
+        password: matchingUser.password
+    };
+
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+    loginError.textContent = '';
+    showAuthenticatedApp(user);
+    loginForm.reset();
+}
+
+function logoutUser() {
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+    const liveBadge = document.querySelector('.live');
+    if (liveBadge) {
+        liveBadge.innerHTML = '<span class="dot"></span>AI SYSTEM ONLINE';
+    }
+    showLoginScreen();
+}
+
+if (showLoginBtn) {
+    showLoginBtn.addEventListener('click', () => switchAuthMode('login'));
+}
+
+if (showRegisterBtn) {
+    showRegisterBtn.addEventListener('click', () => switchAuthMode('register'));
+}
+
+let savedUser = null;
+try {
+    savedUser = JSON.parse(localStorage.getItem(AUTH_STORAGE_KEY) || 'null');
+} catch (error) {
+    savedUser = null;
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+}
+
+if (savedUser) {
+    showAuthenticatedApp(savedUser);
+} else {
+    showLoginScreen();
+}
+
+if (loginForm) {
+    loginForm.addEventListener('submit', handleLoginSubmit);
+    loginForm.addEventListener('input', () => {
+        if (loginError) loginError.textContent = '';
+    });
+}
+
+if (registerForm) {
+    registerForm.addEventListener('submit', handleRegisterSubmit);
+    registerForm.addEventListener('input', () => {
+        if (registerError) registerError.textContent = '';
+    });
+}
+
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', logoutUser);
+}
+
+// --- Motor server helpers and input helpers ---
+_aquaState.motorServerUrl = null;
+_aquaState.motorConnected = false;
+
+function connectMotorServer(){
+    const input = document.getElementById('motorServer');
+    const status = document.getElementById('motorConnectionStatus');
+    if(!input){ return; }
+    const raw = input.value.trim();
+    if(!raw){ if(status) status.textContent = 'Enter motor server URL'; return; }
+    const base = raw.replace(/\/$/, '');
+    // quick health check to /status endpoint
+    fetch(base + '/status', { method: 'GET' })
+        .then(res => {
+            if(res.ok){
+                _aquaState.motorServerUrl = base;
+                _aquaState.motorConnected = true;
+                if(status) status.textContent = 'Connected';
+                showSystemAlert('Connected to motor server', true);
+            } else {
+                _aquaState.motorConnected = false;
+                if(status) status.textContent = 'Connection failed';
+                showSystemAlert('Motor server connection failed (' + res.status + ')', false);
+            }
+        })
+        .catch(err => {
+            _aquaState.motorConnected = false;
+            if(status) status.textContent = 'Disconnected';
+            showSystemAlert('Motor server unreachable: ' + (err.message || err), false);
+        });
+}
+
+function sendPumpCommand(action){
+    if(!_aquaState.motorServerUrl){ showSystemAlert('No motor server configured', false); return; }
+    const base = _aquaState.motorServerUrl.replace(/\/$/, '');
+    const endpoint = base + '/pump/' + (action === 'start' ? 'start' : 'stop');
+    const waterType = document.getElementById('waterTypeSelect')?.value || 'fresh';
+    fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ waterType })
+    }).then(res => {
+        if(res.ok){
+            showSystemAlert('Motor server acknowledged ' + action, true);
+        } else {
+            showSystemAlert('Motor server error: ' + res.status, false);
+        }
+    }).catch(err => {
+        showSystemAlert('Failed to send command: ' + (err.message || err), false);
+    });
+}
+
+// Enforce lowercase for Gmail addresses (and general emails) while typing
+function enforceLowerForGmailField(el){
+    if(!el) return;
+    el.addEventListener('input', (e) => {
+        const v = e.target.value;
+        // if user is typing an email (contains @) or the text mentions gmail, convert to lowercase
+        if(/@/.test(v) || /gmail/i.test(v)){
+            const lower = v.toLowerCase();
+            if(v !== lower) e.target.value = lower;
+        }
+    });
+}
+
+enforceLowerForGmailField(document.getElementById('loginIdentifier'));
+enforceLowerForGmailField(document.getElementById('registerIdentifier'));
+
 </script>
+
+</div>
 
 </body>
 </html>
